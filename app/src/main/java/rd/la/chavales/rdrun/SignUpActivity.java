@@ -9,12 +9,24 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+
+
 public class SignUpActivity extends AppCompatActivity {
     // Explicit Variables
     private EditText nameEditText, surnameEditText, userEditText, passwordEditText;
     private RadioGroup radioGroup;
     private RadioButton avata1RadioButton, avata2RadioButton, avata3RadioButton, avata4RadioButton, avata5RadioButton;
     private String nameString, surnameString, userString, passwordString, avataString;
+    private static final String urlPHP = "http://swiftcodingthai.com/rd/add_user_noom.php";
 
 
 
@@ -91,10 +103,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void confirmValue() {
         MyConstant myConstant = new MyConstant();
-        int[] avataInts = myConstant.getAvataInts();
+        int[] avata = myConstant.getAvataInts();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setIcon(avataInts[Integer.parseInt(avataString)]);
+        builder.setIcon(avata[Integer.parseInt(avataString)]);
         builder.setTitle("โปรดตรวจสอบข้อมูล");
         builder.setMessage("Name = " + nameString + "\n" +
                 "Surname = " + surnameString + "\n" +
@@ -113,6 +125,7 @@ public class SignUpActivity extends AppCompatActivity {
                 dialogInterface.dismiss();
             }
         });
+        builder.show();
 
 
 
@@ -120,8 +133,35 @@ public class SignUpActivity extends AppCompatActivity {
     } //Confirm Values
 
     private void uploadValueToServer() {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = new FormEncodingBuilder()
+                .add("isAdd", "true")
+                .add("Name", nameString)
+                .add("Surname", surnameString)
+                .add("User", userString)
+                .add("Password", passwordString)
+                .add("Avata", avataString)
+                .build();
+        Request.Builder builder = new Request.Builder();
+        Request request = builder.url(urlPHP).post(requestBody).build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
 
-    }
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                finish();
+
+            }
+        });
+
+
+
+
+    }  //upload
 
     private boolean checkChoose() {
         boolean result = false;
@@ -133,7 +173,7 @@ public class SignUpActivity extends AppCompatActivity {
             result = true;
         }
 
-        return false;
+        return result;
     }
 
     private boolean clickSpace() {
