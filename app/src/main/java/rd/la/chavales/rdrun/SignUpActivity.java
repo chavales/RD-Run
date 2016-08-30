@@ -32,6 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
         avata5RadioButton = (RadioButton) findViewById(R.id.radioButton5);
 
 
+
     } //Main Method
 
     public void clickSignUpSign(View view) {
