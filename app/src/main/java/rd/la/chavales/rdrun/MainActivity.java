@@ -13,6 +13,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }  // Main Method
 
+    public void clickSignInMain(View view) {
+
+
+    }  //clickSignIn
+
     // Get Event from Button
     public void clickSignUpMain(View view) {
         startActivity(new Intent(MainActivity.this, SignUpActivity.class));
